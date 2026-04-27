@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Esport - History</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #000000;
+        }
+        .user-info {
+            margin-bottom: 24px;
+            padding: 16px 24px;
+            background: #f5f5f5;
+            border: 2px solid #000000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .user-avatar {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: #000000;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            border: 2px solid #000000;
+        }
+        .user-details { flex: 1; }
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 2px;
+        }
+        .user-email {
+            font-size: 13px;
+            color: #555555;
+        }
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            margin-left: auto;
+        }
+        .btn-top {
+            padding: 10px 20px;
+            border: 2px solid #000000;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #000000;
+        }
+        .btn-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .btn-history-top {
+            background: #000000;
+            color: #ffffff;
+        }
+        .btn-history-top:hover { background: #333333; }
+        .btn-home-top {
+            background: #ffffff;
+            color: #000000;
+        }
+        .btn-home-top:hover { background: #f0f0f0; }
+        @media (max-width: 768px) {
+            .top-actions {
+                margin-left: 0;
+                margin-top: 12px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        .history-container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        .tournament-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15), 0 0 40px rgba(0,0,0,0.1), inset 0 0 20px rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        .tournament-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+            animation: shine 4s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes shimmer {
+            0%, 100% { box-shadow: 0 0 20px rgba(0,0,0,0.15), 0 0 40px rgba(0,0,0,0.1), inset 0 0 20px rgba(255,255,255,0.5); }
+            50% { box-shadow: 0 0 30px rgba(0,0,0,0.25), 0 0 60px rgba(0,0,0,0.15), inset 0 0 30px rgba(255,255,255,0.6); }
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        .tournament-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0,0,0,0.25), 0 0 60px rgba(0,0,0,0.15), inset 0 0 30px rgba(255,255,255,0.6);
+        }
+        .match-id-top {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 4px;
+        }
+        .tournament-type {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+        .map-name {
+            font-size: 14px;
+            color: #555555;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .winners-section {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .winners-title {
+            font-size: 12px;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .winner-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .winner-item:last-child { margin-bottom: 0; }
+        .winner-rank {
+            font-weight: 700;
+            color: #000000;
+        }
+        .winner-name {
+            font-weight: 600;
+            color: #000000;
+        }
+        .winner-kills {
+            color: #555555;
+            font-size: 13px;
+        }
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .match-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .stat-item { text-align: center; }
+        .stat-label {
+            font-size: 11px;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000000;
+            margin-top: 4px;
+        }
+        .tournament-ended {
+            padding: 12px;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .no-history {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888888;
+            font-size: 16px;
+            grid-column: 1 / -1;
+        }
+        @media (max-width: 768px) {
+            .history-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .tournament-card { padding: 20px 16px; }
+            .match-id-top { font-size: 16px; }
+            .tournament-type { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- User Info -->
+    <div class="user-info">
+        <div class="user-avatar" id="userAvatar">A</div>
+        <div class="user-details">
+            <div class="user-name" id="userName">Apex Player</div>
+            <div class="user-email" id="userEmail">welcome@apexesport.com</div>
+        </div>
+        <div class="top-actions">
+            <button class="btn-top btn-home-top" onclick="goToHome()">Home</button>
+        </div>
+    </div>
+
+    <!-- History Container -->
+    <div class="history-container" id="historyContainer">
+        <!-- Tournament cards will be populated by JavaScript -->
+    </div>
+
+    <div class="no-history" id="noHistoryMsg" style="display: none;">
+        No match history available.
+    </div>
+
+    <script>
+        // DOM Elements
+        const userNameEl = document.getElementById('userName');
+        const userEmailEl = document.getElementById('userEmail');
+        const userAvatarEl = document.getElementById('userAvatar');
+        const historyContainer = document.getElementById('historyContainer');
+        const noHistoryMsg = document.getElementById('noHistoryMsg');
+
+        // Sample winners data (in real app, this would come from database)
+        const winnersData = {
+            solo: [
+                { matchId: 'M#888', map: 'Erangel', winners: ['Player1', 'Player2', 'Player3'], kills: [8, 6, 5] },
+                { matchId: 'M#887', map: 'Miramar', winners: ['Player4', 'Player5', 'Player6'], kills: [10, 7, 4] },
+                { matchId: 'M#886', map: 'Sanhok', winners: ['Player7', 'Player8', 'Player9'], kills: [12, 8, 6] },
+                { matchId: 'M#885', map: 'Vikendi', winners: ['Player10', 'Player11', 'Player12'], kills: [9, 5, 3] }
+            ],
+            duo: [
+                { matchId: 'M#888', map: 'Erangel', winners: ['Team1', 'Team2', 'Team3'], kills: [15, 12, 10] },
+                { matchId: 'M#887', map: 'Miramar', winners: ['Team4', 'Team5', 'Team6'], kills: [18, 14, 9] }
+            ],
+            squad: [
+                { matchId: 'M#888', map: 'Sanhok', winners: ['Squad1', 'Squad2', 'Squad3'], kills: [25, 22, 18] },
+                { matchId: 'M#887', map: 'Erangel', winners: ['Squad4', 'Squad5', 'Squad6'], kills: [28, 20, 15] }
+            ]
+        };
+
+        // Get payment history from sessionStorage
+        function getPaymentHistory() {
+            const stored = sessionStorage.getItem('paymentHistory');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Load user data
+        function loadUserData() {
+            const userName = sessionStorage.getItem('apexUserName') || 'Apex Player';
+            const userEmail = sessionStorage.getItem('apexUserEmail') || 'welcome@apexesport.com';
+            
+            userNameEl.textContent = userName;
+            userEmailEl.textContent = userEmail;
+            userAvatarEl.textContent = userName.charAt(0).toUpperCase();
+        }
+
+        // Populate history cards
+        function populateHistory(tournamentType) {
+            const paymentHistory = getPaymentHistory();
+            
+            // Filter payment history for current tournament type
+            const matches = paymentHistory.filter(p => p.tournamentType === tournamentType);
+            
+            if (matches.length === 0) {
+                historyContainer.innerHTML = '';
+                noHistoryMsg.style.display = 'block';
+                return;
+            }
+            
+            noHistoryMsg.style.display = 'none';
+            
+            const cards = matches.map((match, index) => {
+                const typeName = tournamentType.charAt(0).toUpperCase() + tournamentType.slice(1);
+                const winnersList = winnersData[tournamentType] && winnersData[tournamentType][index % winnersData[tournamentType].length];
+                
+                let winnersHtml = '';
+                if (winnersList) {
+                    winnersHtml = `
+                        <div class="winners-section">
+                            <div class="winners-title">Winners</div>
+                            ${winnersList.winners.map((winner, i) => `
+                                <div class="winner-item">
+                                    <span class="winner-rank rank-${i + 1}">#${i + 1}</span>
+                                    <span class="winner-name">${winner}</span>
+                                    <span class="winner-kills">${winnersList.kills[i]} kills</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="tournament-card">
+                        <div class="match-id-top">#${match.matchId}</div>
+                        <div class="tournament-type">${typeName}</div>
+                        <div class="map-name">Map: ${winnersList ? winnersList.map : 'Unknown'}</div>
+                        ${winnersHtml}
+                        <div class="match-stats">
+                            <div class="stat-item">
+                                <div class="stat-label">Date</div>
+                                <div class="stat-value">${match.date}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Your Rank</div>
+                                <div class="stat-value">#${match.rank}</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">Your Score</div>
+                                <div class="stat-value">${match.score.toLocaleString()}</div>
+                            </div>
+                        </div>
+                        <div class="tournament-ended">Tournament Ended</div>
+                    </div>
+                `;
+            }).join('');
+            
+            historyContainer.innerHTML = cards;
+        }
+
+        // Go to home
+        function goToHome() {
+            window.location.href = 'home.html';
+        }
+
+        // Check authentication and load data
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = sessionStorage.getItem('apexLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadUserData();
+            
+            // Get tournament type from sessionStorage (set by home.html)
+            const tournamentType = sessionStorage.getItem('currentTournamentType') || 'solo';
+            
+            // Populate history for selected tournament type
+            populateHistory(tournamentType);
+        });
+    </script>
+</body>
+</html>
